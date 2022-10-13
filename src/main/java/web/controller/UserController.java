@@ -54,7 +54,7 @@ public class UserController {
         return "users/edit";
     }
 
-    @PatchMapping("/users/{id}")
+    @PostMapping("/{id}")
     public String update(@PathVariable int id, @ModelAttribute("user") User user) {
         User existingUser = userService.getUserById(id);
         existingUser.setId(id);
