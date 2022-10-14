@@ -22,20 +22,24 @@ public class UserServiceImpl implements UserService {
     public void saveUser(User user) {
         dao.saveUser(user);
     }
+
     @Override
     public User getUserById(int id) {
         return this.dao.getUserById(id);
     }
+
     @Transactional
     @Override
     public void updateUser(User user) {
         this.dao.updateUser(user);
     }
+
     @Transactional
     @Override
     public void deleteUserById(int id) {
         this.dao.deleteUserById(id);
     }
+
     @Override
     public List<User> getAllUsers() {
         return this.dao.getAllUsers();

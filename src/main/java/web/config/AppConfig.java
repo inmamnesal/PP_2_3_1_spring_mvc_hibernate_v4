@@ -15,7 +15,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import javax.sql.DataSource;
 import java.util.Objects;
-
+import java.util.Properties;
 
 
 @Configuration
@@ -38,6 +38,7 @@ public class AppConfig {
         dataSource.setUrl(env.getProperty("db.url"));
         dataSource.setUsername(env.getProperty("db.username"));
         dataSource.setPassword(env.getProperty("db.password"));
+
         return dataSource;
     }
 
@@ -50,6 +51,7 @@ public class AppConfig {
             LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
             factory.setDataSource(getDataSource());
             factory.setPackagesToScan("web.models");
+            factory.setJpaProperties(additionalProperties());
             HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
             jpaVendorAdapter.setGenerateDdl(true);
             jpaVendorAdapter.setDatabasePlatform(env.getProperty("hibernate.dialect"));
@@ -57,7 +59,14 @@ public class AppConfig {
             return factory;
         }
 
-        @Bean
+    private Properties additionalProperties() {
+        Properties properties = new Properties();
+        properties.setProperty("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
+        properties.setProperty("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
+        return properties;
+    }
+
+    @Bean
         public PersistenceExceptionTranslationPostProcessor exceptionTranslation(){
             return new PersistenceExceptionTranslationPostProcessor();
     }
